@@ -1,0 +1,228 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Wenneker Article
+% LaTeX Template
+% Version 2.0 (28/2/17)
+%
+% This template was downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Authors:
+% Vel (vel@LaTeXTemplates.com)
+% Frits Wenneker
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[10pt, a4paper, twocolumn]{article} % 10pt font size (11 and 12 also possible), A4 paper (letterpaper for US letter) and two column layout (remove for one column)
+
+\input{structure.tex} % Specifies the document structure and loads requires packages
+
+%----------------------------------------------------------------------------------------
+%	ARTICLE INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{Towards Better Pixabay Tags} % The article title
+
+\author{
+	\authorstyle{Willie Maddox} % Authors
+%	\authorstyle{Willie Maddox\textsuperscript{1,2,3}} % Authors
+%	\newline\newline % Space before institutions
+%	\textsuperscript{2}\institution{University of Texas at Austin, Texas, United States of America}\\ % Institution 2
+%	\textsuperscript{3}\institution{\texttt{LaTeXTemplates.com}} % Institution 3
+}
+
+% Example of a one line author/institution relationship
+%\author{\newauthor{John Marston} \newinstitution{Universidad Nacional Autónoma de México, Mexico City, Mexico}}
+
+\date{\today} % Add a date here if you would like one to appear underneath the title block, use \today for the current date, leave empty for no date
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle % Print the title
+
+\thispagestyle{firstpage} % Apply the page style for the first page (no headers and footers)
+
+%----------------------------------------------------------------------------------------
+%	ABSTRACT
+%----------------------------------------------------------------------------------------
+
+\lettrineabstract{This document serves as the proposal for the final Capstone project for the Machine Learning Engineer Nanodegree offered through Udacity.}
+
+%----------------------------------------------------------------------------------------
+%	ARTICLE CONTENTS
+%----------------------------------------------------------------------------------------
+
+\section{Domain Background} % 1 - 2 para
+
+Pixabay is a website where photographers can publish and share copyright free images and videos.  Since all the contents are released under the CC0 license, they are safe to use without having to ask permission or give credit to the original artist. When a user submits a new image it must first be reviewed by the Pixabay admins.  They look at: 
+
+\begin{itemize}
+%	\item[Image Dimension] All images must have at least 1920 along the long dimension.
+%	\item[Focus and Blurring] The image should be sharp and focused toward the center of the image.
+%	\item[Light and Colors] Check that flash, if used, was used correctly and that image is not overexposed.
+	\item Image Dimensions
+	\item Focus and Blurring
+	\item Lighting and Colors
+	\item Copyright and Duplicates
+	\item Image Manipulations
+	\item Noise and JPEG Compression Artifacts
+	\item Image Hygiene and Composition
+	\item Tilted and Crooked Images
+\end{itemize}
+
+If the image satisfies the above categories then, most likely, it will be approved \citep{Pixabay:Tagging}.  This is probably the primary reason Pixabay is so popular among photographers and artists alike; the overall image quality is professional grade.
+
+% In this section, provide brief details on the background information of the domain from which the project is proposed. Historical information relevant to the project should be included. It should be clear how or why a problem in the domain can or should be solved. Related academic research should be appropriately cited in this section, including why that research is relevant.  Additionally, a discussion of your personal motivation for investigating a particular problem in the domain is encouraged but not required.
+
+\section{Problem Statement} % 1 para
+
+Along with the image upload, the user must also provide at least 3 tags describing the content of the image.  The average number of tags per image is around 10.  Tags make the image easily searchable by other users.  Pixabay provides a tagging tutorial on their website but in general the tags are not required to meet the same level of quality standards that are placed on a newly uploaded image \citep{Pixabay:ImgStandards}. Nor can they really be enforced.  The metric for measuring the quality of an image is well defined.  All images must have at least 1920 along the long dimension.  The image should be sharp and in focus.  Avoid embedded timestamps.  These are all acceptable forms of objective measurement.  Tags, on the other hand, represent a persons description or interpretation of what is contained in an image and as such they are difficult to use as a source of measurement.  For example, Fig.\ref{screw-1924174_640} looks like a \textit{nuts and bolts} to me, but to someone else it might be \textit{hardware} or maybe even \textit{wood}.  Which tag is more \textit{correct} is unclear.  Hence, it is probably not a good idea to use tags as a measure of whether or not an image should or should not be approved. 
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{screw-1924174_640.jpg} % Figure image
+	\caption{Nuts and Bolts} % Figure caption
+	\label{screw-1924174_640} % Label for referencing with \ref{bear}
+\end{figure}
+
+When a user uploads an image to Pixabay, they are required to provide at least 3 labels (or tags) to describe the content of their image.  Assuming that the user is the original author (or photographer) of the image, then coming up with 3 relevant tags should be trivial.  However, on average, users will tend to choose around 10 tags to label their image, makeing it easier to find through searches.  
+
+People end up choosing tags that are not exactly relevant.
+You don't have to spend a lot of time browsing pictures before you find one with a bogus label.
+The problem is that many of the 
+
+
+Can we improve the classification by adding more types of dogs, cats, etc.
+
+The good thing is that users who upload pictures have first hand knowledge of familiar with the content in the image and can generally be trusted to tag the image correctly.  After all, an image with mislabeled tags is an image that no one will ever find. And since so much effort is required on the part of the author to get an image approved, it would seem highly unlikely that someone mislabel their own image on purpose.  
+
+When a user is first presented with the tag screen, they are asked to type in tags corresponding to the content of their image.  After they type the first tag, a list of similar words (30 or so) appear for the user to select from. The list is auto-refreshed as new tags are added.  This is a nice convenience that Pixabay provides, but wouldn't it be even nicer to recommend to the user in the first place a list of tags based soley on the content of the image?  
+
+In this section, clearly describe the problem that is to be solved. The problem described should be well defined and should have at least one relevant potential solution. 
+
+Additionally, describe the problem thoroughly such that it is clear that the problem is:
+
+\begin{description}
+	\item[Quantifiable] The problem can be expressed in mathematical or logical terms.
+	\item[Measurable] The problem can be measured by some metric and clearly observed.
+	\item[Replicable] The problem can be reproduced and occurs more than once. Show examples of 2-3 images that have bogus tags.
+\end{description}
+
+\section{Datasets and Inputs} % 2 - 3 para
+
+Make a table summarizing the different databases in use.
+
+\begin{table}[b]
+\caption{\label{tab:table2}
+A table with numerous columns that still fits into a single column. 
+Here, several entries share the same footnote. 
+Inspect the \LaTeX\ input for this table to see exactly how it is done.}
+\begin{ruledtabular}
+\begin{tabular}{cccc}
+ &$r_c$ (\AA)&$r_0$ (\AA)&$\kappa r_0$\\
+\hline
+Cu& 0.800 & 14.10 & 2.550\\
+Ag& 0.990 & 15.90 & 2.710\\
+Au& 1.150 & 15.90 & 2.710\\
+Mg& 0.490 & 17.60 & 3.200\\
+Zn& 0.300 & 15.20 & 2.970\\
+Cd& 0.530 & 17.10 & 3.160\\
+Hg& 0.550 & 17.80 & 3.220\\
+Al& 0.230 & 15.80 & 3.240\\
+Ga& 0.310 & 16.70 & 3.330\\
+In& 0.460 & 18.40 & 3.500\\
+Tl& 0.480 & 18.90 & 3.550\\
+\end{tabular}
+\end{ruledtabular}
+\footnotetext[1]{Here's the first.}
+\footnotetext[2]{Here's the second.}
+\footnotetext[3]{Here's the third.}
+\footnotetext[4]{Here's the fourth.}
+\footnotetext[5]{And etc.}
+\end{table}
+
+\subsection{Image/Label Datasets}
+
+Imagenet images and labels
+COCO images and labels
+Pascal images and labels
+
+\subsection{Multi-Label Datasets}
+
+\subsection{Image/Multi-label Datasets}
+
+Pixabay images and labels (i.e. tags).
+
+Discuss the Pixabay API
+
+In this section, the dataset(s) and/or input(s) being considered for the project should be thoroughly described, such as: 
+
+\begin{enumerate}
+	\item how they relate to the problem
+	\item why they should be used
+	\item how the dataset or input is (was) obtained
+	\item the characteristics of the dataset or input
+\end{enumerate}
+
+Information should be included with relevant references and citations as necessary. It should be clear how the dataset(s) or input(s) will be used in the project and whether their use is appropriate given the context of the problem \citep{Herrera:2016,Read:2011:CCM:2070617.2070629,Zhang:2006,DBLP:journals/corr/DaveTEV16,Miller:1995,Fellbaum:1998,Zhang:2017,2017arXiv171009230L,2017arXiv171008049W,2015arXiv151105616H,2014arXiv1406.5726W}.
+
+\section{Solution Statement} % 1 para
+
+Transfer learning on imagenet.  Add k classes where k is the number of classes in pixabay images that are not classified by Imagenet.
+
+For this project, I will use a pretrained model of Imagenet
+
+The plan is to use the Imagenet model as a fixed feature extractor
+
+\begin{enumerate}
+	\item How many images per category are there in Imagenet. (between 732 and 1300 per synset)
+	\item How many nouns (or physical entities) are there in WordNet.
+	\item How many hypernyms classes are there in Imagenet. 
+	\item How many hyponyms per hypernym are there in Imagenet.
+	\item What about holonyms and meronyms. Can they be of any use with this problem?
+\end{enumerate}
+
+Because the images are of such high quality on Pixabay they make great specimens for training on CNN's.
+
+In this section, clearly describe a solution to the problem. The solution should be applicable to the project domain and appropriate for the dataset(s) or input(s) given. Additionally, describe the solution thoroughly such that it is clear that the solution is 
+
+\begin{description}
+	\item[Quantifiable] The solution can be expressed in mathematical or logical terms.
+	\item[Measurable] The solution can be measured by some metric and clearly observed.
+	\item[Replicable] The solution can be reproduced and occurs more than once.
+\end{description}
+
+\section{Benchmark Model} % 1 - 2 para
+
+In this section, provide the details for a benchmark model or result that relates to the domain, problem statement, and intended solution. Ideally, the benchmark model or result contextualizes existing methods or known information in the domain and problem given, which could then be objectively compared to the solution. Describe how the benchmark model or result is measurable (can be measured by some metric and clearly observed) with thorough detail.
+
+\section{Evaluation Metrics} % 1 - 2 para
+
+In this section, propose at least one evaluation metric that can be used to quantify the performance of both the benchmark model and the solution model. The evaluation metric(s) you propose should be appropriate given the context of the data, the problem statement, and the intended solution. 
+
+\begin{equation}
+\mathrm{IOU} = \frac{1}{N}\sum_{i=1}^{N}\frac{\vert y^i \wedge \hat{y} \vert}{\vert y^i \vee \hat{y} \vert}, \label{eq:IOU}
+\end{equation}
+
+Describe how the evaluation metric(s) are derived and provide an example of their mathematical representations (if applicable). Complex evaluation metrics should be clearly defined and quantifiable (can be expressed in mathematical or logical terms).
+
+\section{Project Design} % 1 page
+
+In this final section, summarize a theoretical workflow for approaching a solution given the problem. Provide thorough discussion for what strategies you may consider employing, what analysis of the data might be required before being used, or which algorithms will be considered for your implementation. The workflow and discussion that you provide should align with the qualities of the previous sections. Additionally, you are encouraged to include small visualizations, pseudocode, or diagrams to aid in describing the project design, but it is not required. The discussion should clearly outline your intended workflow of the capstone project.
+
+%----------------------------------------------------------------------------------------
+%	BIBLIOGRAPHY
+%----------------------------------------------------------------------------------------
+
+\printbibliography[title={Bibliography}] % Print the bibliography, section title in curly brackets
+
+%----------------------------------------------------------------------------------------
+
+\end{document}

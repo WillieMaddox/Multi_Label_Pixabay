@@ -136,7 +136,7 @@ def read_pixabay_tally_file(hit_limit=0):
     with open(tally_file) as ifs:
         lines = ifs.read().strip().split('\n')
     tallies = [line.split('\t') for line in lines]
-    tallies = {label: int(tally) for label, tally in tallies if tally > hit_limit}
+    tallies = {label: int(tally) for tally, label in tallies if int(tally) > hit_limit}
     return tallies
 
 

@@ -71,7 +71,10 @@ class UserCredit(object):
             credit = self.credits_remaining
 
         if credit <= 1:
-            time.sleep(seconds)
+            for i in range(seconds, 0, -1):
+                sys.stdout.write("\rSleeping: " + str(i) + ' ' + 'z'*(3 - i % 3))
+                time.sleep(1)
+            print("")
 
 
 UC = UserCredit()

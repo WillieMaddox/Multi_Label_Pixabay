@@ -28,10 +28,11 @@ def check_word(word, words_set, suffix=None):
 def get_counts(md):
     lc = {}
     for record in iter(md.values()):
-        for tag in record['tags']:
-            if tag not in lc:
-                lc[tag] = 0
-            lc[tag] += 1
+        if 'top3' in record:
+            for tag in record['top3']:
+                if tag not in lc:
+                    lc[tag] = 0
+                lc[tag] += 1
     return lc
 
 
@@ -49,7 +50,7 @@ def simplify_json(meta_old, keys_to_keep):
 def extract_tags(meta_old):
     meta_new = {}
     for idx, record_old in iter(meta_old.items()):
-        meta_new[int(idx)] = record_old['tags']
+        meta_new[int(idx)] = record_old['top3']
     return meta_new
 
 

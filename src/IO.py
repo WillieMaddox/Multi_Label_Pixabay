@@ -1,10 +1,10 @@
 import os
 import json
 import shutil
+import pickle
 from operator import itemgetter
 from PIL import Image
 import networkx as nx
-import pickle
 import utils
 
 data_source_dir = "/media/Borg_LS/DATA"
@@ -131,8 +131,9 @@ def write_pixabay_orphans_file(orphan_metadata):
     dump_pkl(meta_file, orphan_metadata)
 
 
-def read_pixabay_tally_file(hit_limit=0):
-    tally_file = os.path.join(pixabay_source_dir, 'tally.txt')
+def read_pixabay_tally_file(hit_limit=0, top3=False):
+    tf = 'tally3.txt' if top3 else 'tally.txt'
+    tally_file = os.path.join(pixabay_source_dir, tf)
     with open(tally_file) as ifs:
         lines = ifs.read().strip().split('\n')
     tallies = [line.split('\t') for line in lines]
@@ -140,8 +141,9 @@ def read_pixabay_tally_file(hit_limit=0):
     return tallies
 
 
-def write_pixabay_tally_file(label_counts):
-    tally_file = os.path.join(pixabay_source_dir, 'tally.txt')
+def write_pixabay_tally_file(label_counts, top3=False):
+    tf = 'tally3.txt' if top3 else 'tally.txt'
+    tally_file = os.path.join(pixabay_source_dir, tf)
     with open(tally_file, 'w') as ofs:
         for label0, counts in sorted(label_counts.items(), key=itemgetter(1), reverse=True):
             ofs.write(f"{counts}\t{label0}\n")
@@ -242,13 +244,13 @@ def merge_orphaned_metadata():
     write_pixabay_metadata_file(metadata)
 
 
-def update_files(metadata):
+def update_files(metadata, top3=False):
     write_pixabay_metadata_file(metadata)
     remove_orphaned_metadata()
     metadata = read_pixabay_metadata_file()
     print(f'metadata file saved. {len(metadata)} total records')
     label_counts = utils.get_counts(metadata)
-    write_pixabay_tally_file(label_counts)
+    write_pixabay_tally_file(label_counts, top3=top3)
     print(f'tally file saved. {len(label_counts)} unique labels.')
 
 

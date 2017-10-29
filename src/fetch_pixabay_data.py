@@ -127,7 +127,6 @@ def download_and_save_image(args_tuple):
 
 def get_image_metadata(meta, curr_labels):
 
-    total = 0
     n_hits = 0
     page = 0
 
@@ -145,7 +144,6 @@ def get_image_metadata(meta, curr_labels):
             UC.take_a_nap(t=3)
             break
 
-        total = temp['total']
         for record in temp['hits']:
             n_hits += 1
 
@@ -167,14 +165,7 @@ def get_image_metadata(meta, curr_labels):
         if temp['totalHits'] <= page * PER_PAGE:
             break
 
-    return meta, total
-
-
-def recurse_labels(current_metadata, current_labels):
-
-    current_metadata, total = get_image_metadata(current_metadata, current_labels)
-
-    return current_metadata
+    return meta
 
 
 if __name__ == '__main__':
@@ -200,17 +191,17 @@ if __name__ == '__main__':
             continue
 
         if label in ('papillon',):
-            # papillon returns thousands of butterflies and breaks the code.
-            # Fix later, skip for now.
+            # TODO: papillon returns thousands of butterflies and breaks the code.
+            # TODO: Fix later, skip for now.
             continue
 
         UC.take_a_nap()
 
-        image_meta = {idx: meta for idx, meta in labelsdata.items() if label in meta['top3']}
-
         print('\n -- Beginning:', ii, label, '-- Credit:', UC, '--')
 
-        image_meta = recurse_labels(image_meta, {label})
+        image_meta = {idx: meta for idx, meta in labelsdata.items() if label in meta['top3']}
+
+        image_meta = get_image_metadata(image_meta, {label})
 
         url_filename_list = []
         labels_updated = False

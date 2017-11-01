@@ -127,7 +127,6 @@ def download_and_save_image(args_tuple):
 
 def get_image_metadata(meta, curr_labels):
 
-    n_hits = 0
     page = 0
 
     while page <= 3:
@@ -145,7 +144,6 @@ def get_image_metadata(meta, curr_labels):
             break
 
         for record in temp['hits']:
-            n_hits += 1
 
             top3_tags = tuple([tag.strip(' ') for tag in record['tags'].split(',')])
 
@@ -187,13 +185,14 @@ if __name__ == '__main__':
 
     for ii, label in enumerate(labels):
 
-        if ii < 415:
-            continue
 
-        if label in ('papillon',):
-            # TODO: papillon returns thousands of butterflies and breaks the code.
-            # TODO: Fix later, skip for now.
-            continue
+        # if ii < 415:
+        #     continue
+
+        # if label in ('papillon',):
+        #     # TODO: papillon returns thousands of butterflies and breaks the code.
+        #     # TODO: Fix later, skip for now.
+        #     continue
 
         UC.take_a_nap()
 
@@ -237,7 +236,10 @@ if __name__ == '__main__':
             n_new = 0
             n_skipped = 0
             n_error = 0
-            sys.stdout.write(f"\rRemain:{n_records:>4}")
+            sys.stdout.write(f"Remain:{n_records:>4} "
+                             f"New:{n_new:>4} "
+                             f"Skipped:{n_skipped:>3} "
+                             f"Errors:{n_error:>3}")
             results = ThreadPool(2).imap_unordered(download_and_save_image, url_filename_list)
             for idx, result, is_new in results:
                 if result:
@@ -255,9 +257,9 @@ if __name__ == '__main__':
                 n_records -= 1
 
                 sys.stdout.write(f"\rRemain:{n_records:>4} "
-                                 f" Skipped:{n_skipped:>3} "
-                                 f" New:{n_new:>3} "
-                                 f" Error:{n_error:>3}")
+                                 f"New:{n_new:>4} "
+                                 f"Skipped:{n_skipped:>3} "
+                                 f"Errors:{n_error:>3}")
 
         print("")
         # update the labels file with the new and updated labels.

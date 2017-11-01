@@ -182,18 +182,6 @@ def write_pixabay_image_blacklist_file(imageblacklist):
     with open(imageblacklist_file, 'w') as ofs:
         for ii in sorted(imageblacklist):
             ofs.write(f"{ii}\n")
-# def read_pixabay_aliases_file(dual=False):
-#     aliases_file = os.path.join(pixabay_source_dir, 'aliases.txt')
-#     with open(aliases_file) as ifs:
-#         lines = ifs.read().strip().split('\n')
-#     labels_aliases = [line.split('\t') for line in lines]
-#     labels, alias_strings = list(zip(*labels_aliases))
-#     alias_lists = [[w.strip() for w in ws.split(',')] for ws in alias_strings]
-#     if dual:
-#         pixabay_aliases = {alias: label for label, alias_list in zip(labels, alias_lists) for alias in alias_list}
-#     else:
-#         pixabay_aliases = {label: alias_list for label, alias_list in zip(labels, alias_lists)}
-#     return pixabay_aliases
 
 
 def read_pixabay_aliases_file(dual=False):
@@ -281,10 +269,10 @@ def update_files(metadata, top3=False):
     write_pixabay_metadata_file(metadata)
     remove_orphaned_metadata()
     metadata = read_pixabay_metadata_file()
-    print(f'metadata file saved. {len(metadata)} total records')
+    print(f'metadata file saved. {len(metadata)} total records.', end=' ')
     label_counts = utils.get_counts(metadata)
     write_pixabay_tally_file(label_counts, top3=top3)
-    print(f'tally file saved. {len(label_counts)} unique labels.')
+    print(f'tally file saved. {len(label_counts)} unique labels.', end=' ')
 
 
 def convert_png_to_jpg():

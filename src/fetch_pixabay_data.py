@@ -39,12 +39,7 @@ class UserCredit(object):
 
     def __call__(self, headers):
         self.time_remaining = int(headers['X-RateLimit-Reset'])
-
-        credit = int(headers['X-RateLimit-Remaining'])
-        # Lets
-        if self.credits_remaining - credit != 1:
-            print('WARNING: Credit mismatch: before {}, after {}'.format(self.credits_remaining, credit))
-        self.credits_remaining = credit
+        self.credits_remaining = int(headers['X-RateLimit-Remaining'])
 
     def __str__(self):
         return f"{self.credits_remaining}"

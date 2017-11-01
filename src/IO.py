@@ -62,6 +62,15 @@ def read_wordnet_synset_words_file():
     return synset_words_dict
 
 
+def read_imagenet_wnid_words_file():
+    map_clsloc = imagenet_source_dir + '/ILSVRC/devkit/data/map_clsloc.txt'
+    with open(map_clsloc) as ifs:
+        classes_temp = ifs.read().strip().split('\n')
+    imagenet_classes = [kls.split() for kls in classes_temp]
+    imagenet_classes = {k: v.replace('_', ' ') for k, _, v in imagenet_classes}
+    return imagenet_classes
+
+
 def get_whitelist_words():
     synset_words_dict = read_wordnet_synset_words_file()
     return set([s for ss in synset_words_dict.values() for s in ss])

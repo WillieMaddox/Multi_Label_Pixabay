@@ -155,15 +155,11 @@ def get_image_metadata(meta, curr_labels):
 
 if __name__ == '__main__':
 
-    map_clsloc = IO.imagenet_source_dir + '/ILSVRC/devkit/data/map_clsloc.txt'
-    with open(map_clsloc) as ifs:
-        classes_temp = ifs.read().strip().split('\n')
-    imagenet_classes = [kls.split() for kls in classes_temp]
-    imagenet_classes = {k: v.replace('_', ' ') for k, _, v in imagenet_classes}
-    labels = list(imagenet_classes.values())
+    # imagenet_classes = IO.read_imagenet_wnid_words_file()
+    # labels = list(imagenet_classes.values())
 
-    # with open('data/planets.names') as ifs:
-    #     labels = ifs.read().strip().split('\n')
+    with open('../data/query_tags.txt') as ifs:
+        labels = ifs.read().strip().split('\n')
 
     IO.merge_orphaned_metadata()
     IO.merge_orphaned_images()

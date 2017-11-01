@@ -62,6 +62,8 @@
 
 \section{Domain Background} % 1 - 2 para
 
+% In this section, provide brief details on the background information of the domain from which the project is proposed. Historical information relevant to the project should be included. It should be clear how or why a problem in the domain can or should be solved. Related academic research should be appropriately cited in this section, including why that research is relevant.  Additionally, a discussion of your personal motivation for investigating a particular problem in the domain is encouraged but not required.
+
 Pixabay is a website where photographers can publish and share copyright free images and videos.  Since all the contents are released under the CC0 license, they are safe to use without having to ask permission or give credit to the original artist. When a user submits a new image it must first be reviewed by the Pixabay admins.  They look at: 
 
 \begin{itemize}
@@ -78,9 +80,7 @@ Pixabay is a website where photographers can publish and share copyright free im
 	\item Tilted and Crooked Images
 \end{itemize}
 
-If the image satisfies the above categories then, most likely, it will be approved \citep{Pixabay:Tagging}.  This is probably the primary reason Pixabay is so popular among photographers and artists alike; the overall image quality is professional grade.
-
-% In this section, provide brief details on the background information of the domain from which the project is proposed. Historical information relevant to the project should be included. It should be clear how or why a problem in the domain can or should be solved. Related academic research should be appropriately cited in this section, including why that research is relevant.  Additionally, a discussion of your personal motivation for investigating a particular problem in the domain is encouraged but not required.
+If the image satisfies the above categories then, most likely, it will be approved~\cite{Pixabay:Tagging}.  This is probably the primary reason Pixabay is so popular among photographers and artists alike; the overall quality of images in the database is professional grade.
 
 \section{Problem Statement} % 1 para
 
@@ -119,110 +119,106 @@ Additionally, describe the problem thoroughly such that it is clear that the pro
 
 \section{Datasets and Inputs} % 2 - 3 para
 
-Make a table summarizing the different databases in use.
+For this study we will use a custom Pixabay dataset as our primary dataset.  By custom we mean that we will only choose images with tags related to the 1000 classes in Imagenet.  We will also supplement our primary dataset with a secondary dataset consisting of both single-label and multi-label image datasets.  For single-label we will use Imagenet CLS-LOC\citep{ILSVRC15} dataset and for multi-label we will use the Imagenet DET\citep{ILSVRC15}, MSCOCO\citep{MSCOCO} and NUS-WIDE\citep{nus-wide-civr09} datasets.  These secondary datasets are very organized; they come with verified ground truth and can be easily downloaded and extracted for immediate use.  Data from Pixabay does not come prepackaged.  You must submit multiple search queries to build up your own database.  Fortunately they provide an API for registered users\citep{Pixabay:API}. The Pixabay API is well documented and it's usage is relatively straight forward.  At the minimum you need to pass it an API key for authentication and a query string of labels to search.  For example, to retrieve web format photos about "yellow flowers", the query string $q$ needs to be URL encoded\footnote{The key used in the url is invalid so don't expect it to work.  The url is meant to illustrate the basic structure of a request.}. \href{}{\nolinkurl{https://pixabay.com/api/?key=1234567-a1b2c3d4e5f6g7h8i9j0k1l2m&q=yellow+flowers&image_type=photo}}. The response for this request is a JSON encoded data structure containing metadata for a list of images.
 
-%\begin{table}[b]
-%\caption{\label{tab:table2}
-%A table with numerous columns that still fits into a single column. 
-%Here, several entries share the same footnote. 
-%Inspect the \LaTeX\ input for this table to see exactly how it is done.}
-%%\begin{ruledtabular}
-%\begin{tabular}{cccc}
-% &$r_c$ (\AA)&$r_0$ (\AA)&$\kappa r_0$\\
-%\hline
-%Cu& 0.800 & 14.10 & 2.550\\
-%Ag& 0.990 & 15.90 & 2.710\\
-%Au& 1.150 & 15.90 & 2.710\\
-%Mg& 0.490 & 17.60 & 3.200\\
-%Zn& 0.300 & 15.20 & 2.970\\
-%Cd& 0.530 & 17.10 & 3.160\\
-%Hg& 0.550 & 17.80 & 3.220\\
-%Al& 0.230 & 15.80 & 3.240\\
-%Ga& 0.310 & 16.70 & 3.330\\
-%In& 0.460 & 18.40 & 3.500\\
-%Tl& 0.480 & 18.90 & 3.550\\
-%\end{tabular}
-%%\end{ruledtabular}
-%\end{table}
-
-\subsection{Image/Label Datasets}
-
-Imagenet images and labels
-COCO images and labels
-Pascal images and labels
-NUS-WIDE images and labels
-
-\subsection{Multi-Label Datasets}
-
-WordNet
-
-\begin{itemize}
-	\item Tokenization
-	\item Tagging - Nouns only
-	\item Stemming
-	\item Lemmatization
-	\item Semantic relations - hypernym, hyponym, holonym
-	\item Lexical relations - antonym
-	\item Image Hygiene and Composition
-	\item Tilted and Crooked Images
-\end{itemize}
-
-
-\subsection{Image/Multi-label Datasets}
-
-Pixabay images and labels (i.e. tags).
-
-Discuss the Pixabay API
-
-The Pixabay API is well documented and it's usage is relatively straight forward \citep{Pixabay:API}.  At the minimum you need to pass it an API key for authentication and a query string of labels to search.  For example, to retrieve web format photos about "yellow flowers", the query string $q$ needs to be URL encoded\footnote{I used an invalid key here, so this url won't work.  The url is maent to illustrate the basic structure of a request.}. \url{https://pixabay.com/api/?key=1234567-a1b2c3d4e5f6g7h8i9j0k1l2m\&q=yellow+flowers\&image\_type=photo}. The response for this request is a json encoded data structure containing metadata for a list of images:
-
+\begin{code}
+%\captionof{listing}{Pixabay API JSON response}
+\caption{Pixabay API JSON response}
+\label{snip:api-response}
 \begin{minted}[bgcolor=bg]{json}
 {
-"total": 4692,
+"total": 19177,
 "totalHits": 500,
 "hits": [
   {
-    "id": 195893,
-    "type": "photo",
-    "tags": "blossom, bloom, flower",
-    "webformatURL": 
-      "https://pixabay.com/get/..._640.jpg",
-    "webformatWidth": 640,
-    "webformatHeight": 360,
-    "imageWidth": 4000,
-    "imageHeight": 2250,
-    "imageSize": 4731420,
-    ...
+    "id":2895728,
+    "pageURL": ...,
+    "type":"photo",
+    "tags":"flower, pink, yellow",
+    "previewURL": ...,
+    "previewWidth":150,
+    "previewHeight":112,
+    "webformatURL": ...,
+    "webformatWidth":640,
+    "webformatHeight":480,
+    "imageWidth":4608,
+    "imageHeight":3456,
+    "views":56,
+    "downloads":25,
+    "favorites":1,
+    "likes":4,
+    "comments":5,
+    "user_id":5394567,
+    "user":"GeorgeB2",
+    "userImageURL": ...,
   },
   {
-    "id": 14724,
-    ...
+    "id": 195893,
+    "tags": "blossom, bloom, flower",
+    "webformatURL": ...,
+    "..."
   },
-  ...
+  "..."
 ]
 }
 \end{minted}
+\end{code}
+\vspace{1mm}
 
-In the response, there are three top level parameters: The \fcolorbox{white}{bg}{\textcolor{ForestGreen}{"total"}} number of images in the Pixabay database with tags matching the query, the maximum \fcolorbox{white}{bg}{\textcolor{ForestGreen}{"totalHits"}} that can be retrieved with the present query, and the actual \fcolorbox{white}{bg}{\textcolor{ForestGreen}{"hits"}} which are a list of python dictionaries, each containing metadata about a specific image in the database.  For our purposes, we only need a subset of these properties:  A url to fetch the image, the set of labels that describe the image, and a mapping to link the two together.  Each "hit" contains a url for the low, medium, and high resolution versions of the image. Since we will be scaling the image anyway, we can just pick the smallest one that is also larger than the input to our neural network. The medium resolution images, \fcolorbox{white}{bg}{\textcolor{ForestGreen}{"webformatURL"}} don't take up a lot of space in terms of memory and download faster.  The \fcolorbox{white}{bg}{\textcolor{ForestGreen}{"tags"}} are the labels for the image.  \fcolorbox{white}{bg}{\textcolor{ForestGreen}{"id"}} to keep track of which image goes with which tags. 
+A sample of the API response is shown in Snippet \ref{snip:api-response}.  There are three top level parameters: The \fcolorbox{white}{bg}{\textcolor{ForestGreen}{"total"}} number of images in the Pixabay database with tags matching the query, the maximum \fcolorbox{white}{bg}{\textcolor{ForestGreen}{"totalHits"}} that can be retrieved with the present query, and the actual \fcolorbox{white}{bg}{\textcolor{ForestGreen}{"hits"}} which are a list of python dictionaries, each containing metadata about a specific image in the database.  For our purposes, we only need a subset of this metadata:  A url to fetch the image, the set of labels that describe the image, and a mapping to help us keep track of which set of labels goes with each image.  Each "hit" contains a url for a low, medium, and high resolution version of an image. We choose the medium sized image \fcolorbox{white}{bg}{\textcolor{ForestGreen}{"webformatURL"}}. Since most pretrained models use images with dimensions between 200 and 300 pixels as input, this is an appropriate choice. As we can see in the code block, the \fcolorbox{white}{bg}{\textcolor{ForestGreen}{"tags"}} represent the labels for the image.  We will store the \fcolorbox{white}{bg}{\textcolor{ForestGreen}{"tags"}} in a dictionary using the \fcolorbox{white}{bg}{\textcolor{ForestGreen}{"id"}} as the key since they are unique across images. Each downloaded image will be saved using \fcolorbox{white}{bg}{\textcolor{ForestGreen}{"id"}} as the base of the file name.  So for the example above we will have 2895728.jpg and 195893.jpg.  This will make it easy to determine which image goes with which tags and vice versa.
 
-keywords described by  for a list of images for use the search string to fetch All the  are  documented but there are restrictions that make getting the exact data you want a bit tricky.  For one, when you submit a query you get back a  
-
-Search for images with Imagenet Labels
-
-In this section, the dataset(s) and/or input(s) being considered for the project should be thoroughly described, such as: 
-
-\begin{enumerate}
-	\item how they relate to the problem
-	\item why they should be used
-	\item how the dataset or input is (was) obtained
-	\item the characteristics of the dataset or input
-\end{enumerate}
-
-Information should be included with relevant references and citations as necessary. It should be clear how the dataset(s) or input(s) will be used in the project and whether their use is appropriate given the context of the problem \citep{Herrera:2016,Read:2011:CCM:2070617.2070629,Zhang:2006,DBLP:journals/corr/DaveTEV16,Miller:1995,Fellbaum:1998,Zhang:2017,2017arXiv171009230L,2017arXiv171008049W,2015arXiv151105616H,2014arXiv1406.5726W}.
+The details (usage, directory layout, data formats, etc.) of the other datasets are available online and will not be discussed here.  However, it is worth mentioning how each of the datasets will be merged together. The syntax rules for labels depend on the dataset and are generally incompatable across datasets.  Some datasets capatilize proper nouns, some do not (Chihuahua vs chihuahua). Some use spaces to separate multi-word labels, others use underscores (golden retriever vs golden\_retriever). Some use alternate spellings (airplane vs aeroplane).  Before we can merge the above databases together into a complete database we will first need to decide on our own set of rules for labels.
 
 \section{Solution Statement} % 1 para
 
+%In this section, clearly describe a solution to the problem. The solution should be applicable to the project domain and appropriate for the dataset(s) or input(s) given. Additionally, describe the solution thoroughly such that it is clear that the solution is 
+
+%\begin{description}
+%	\item[Quantifiable] The solution can be expressed in mathematical or logical terms.
+%	\item[Measurable] The solution can be measured by some metric and clearly observed.
+%	\item[Replicable] The solution can be reproduced and occurs more than once.
+%\end{description}
+
+The solution is to train a model that is capable of generating a finite set of tags based solely on an input image.  We will measure the performance of our model by comparing the top $k$ predicted labels from our model against the known ground truth labels for each of our images.  The exact value of $k$ and the specific metric used are discussed in the following sections. We set aside a subset of our training data which will be used exclusively for testing. For each image in this testing set, the goal is to reproduce similar results for each one.
+
+\section{Benchmark Model} % 1 - 2 para
+
+% In this section, provide the details for a benchmark model or result that relates to the domain, problem statement, and intended solution. Ideally, the benchmark model or result contextualizes existing methods or known information in the domain and problem given, which could then be objectively compared to the solution. Describe how the benchmark model or result is measurable (can be measured by some metric and clearly observed) with thorough detail.
+
+To benchmark the solution above, we will compare the testing set against three separate models.  The first one will simply be a pretrained Imagenet model\footnote{\url{https://keras.io/applications/}} (Just the base Imagenet model with 1000 classes. No fine tuning.) Since we will be using this same base model for transfer learning, we should expect similar performance classifing single-label images from the base Imagenet classes.  
+
+For the second model, we will use Clarifai's image recognition API\footnote{\url{https://www.clarifai.com/}}.  Clarifai’s image recognition systems recognize various categories, objects, and tags in images, as well as find similar images. The company’s image recognition systems allow its users to find similar images in large uncategorized repositories using a combination of semantic and visual similarities.  We will use the evaluation metrics below to quantify how well the Clarifai model does on our training set.
+
+The third benchmark model, Akiwi, is a semi-automatic image tagging system able to suggest keywords for uploaded images with minimal user input\footnote{\url{http://www.akiwi.eu/}}.  Akiwi does not offer a public API, instead you must drag and drop images in one at a time. We will most likely not run the entire testing set through this benchmark, but rather use it to study edge cases and outliers. It will be interesting to see how well our model compares to these state-of-the-art systems.
+
+% J. Hartmann, N. Hezel, M. Krause and A. Sonnenberg under the supervision of Prof. Kai Uwe Barthel
+% https://visual-computing.com/
+
+\section{Evaluation Metrics} % 1 - 2 para
+
+% In this section, propose at least one evaluation metric that can be used to quantify the performance of both the benchmark model and the solution model. The evaluation metric(s) you propose should be appropriate given the context of the data, the problem statement, and the intended solution. Describe how the evaluation metric(s) are derived and provide an example of their mathematical representations (if applicable). Complex evaluation metrics should be clearly defined and quantifiable (can be expressed in mathematical or logical terms).
+There are two groups of evaluation metrics that apply to multi-label classification: \textit{example-based} metrics and \textit{label-based} metrics.
+In regard to classification problems, there are a good many evaluation metrics to choose from. However, there are two in particular that are commonly used in multi-label classification problems.  The first is
+
+The second is the Ja
+\begin{equation}
+\mathrm{IOU} = \frac{1}{N}\sum_{i=1}^{N}\frac{\vert y^i \wedge \hat{y} \vert}{\vert y^i \vee \hat{y} \vert}, \label{eq:IOU}
+\end{equation}
+
+
+\section{Project Design} % 1 page
+
+% In this final section, summarize a theoretical workflow for approaching a solution given the problem. Provide thorough discussion for what strategies you may consider employing, what analysis of the data might be required before being used, or which algorithms will be considered for your implementation. The workflow and discussion that you provide should align with the qualities of the previous sections. Additionally, you are encouraged to include small visualizations, pseudocode, or diagrams to aid in describing the project design, but it is not required. The discussion should clearly outline your intended workflow of the capstone project.
+
+Search for images with Imagenet Labels
+
+There are restrictions that make getting the exact data you want a bit tricky.  For one, when you submit a query you get back a  
+
+We will use WordNet to create consistent labels across the datasets.
+
 Transfer learning on imagenet.  Add k classes where k is the number of classes in pixabay images that are not classified by Imagenet.
+
+The training, validation, and testing datasets will be drawn from the complete dataset.
 
 For this project, I will use a pretrained model of Imagenet
 
@@ -238,37 +234,26 @@ The plan is to use the Imagenet model as a fixed feature extractor
 
 Because the images are of such high quality on Pixabay they make great specimens for training on CNN's.
 
-In this section, clearly describe a solution to the problem. The solution should be applicable to the project domain and appropriate for the dataset(s) or input(s) given. Additionally, describe the solution thoroughly such that it is clear that the solution is 
+\begin{itemize}
+	\item Tokenization
+	\item Tagging - Nouns only
+	\item Stemming
+	\item Lemmatization
+	\item Lexical semantics: synonym, antonym, hypernym, hyponym, meronym, holonym
+	\item StopWord removal
+\end{itemize}
 
-\begin{description}
-	\item[Quantifiable] The solution can be expressed in mathematical or logical terms.
-	\item[Measurable] The solution can be measured by some metric and clearly observed.
-	\item[Replicable] The solution can be reproduced and occurs more than once.
-\end{description}
+$k-fold$ cross validation
 
-\section{Benchmark Model} % 1 - 2 para
+too compensate for class imbalance, We will use stratification to construct the $k-fold$ cross validation subsets\citep{Kohavi_1995_1137, Sechidis2011}.
 
-In this section, provide the details for a benchmark model or result that relates to the domain, problem statement, and intended solution. Ideally, the benchmark model or result contextualizes existing methods or known information in the domain and problem given, which could then be objectively compared to the solution. Describe how the benchmark model or result is measurable (can be measured by some metric and clearly observed) with thorough detail.
-
-\section{Evaluation Metrics} % 1 - 2 para
-
-In this section, propose at least one evaluation metric that can be used to quantify the performance of both the benchmark model and the solution model. The evaluation metric(s) you propose should be appropriate given the context of the data, the problem statement, and the intended solution. 
-
-\begin{equation}
-\mathrm{IOU} = \frac{1}{N}\sum_{i=1}^{N}\frac{\vert y^i \wedge \hat{y} \vert}{\vert y^i \vee \hat{y} \vert}, \label{eq:IOU}
-\end{equation}
-
-Describe how the evaluation metric(s) are derived and provide an example of their mathematical representations (if applicable). Complex evaluation metrics should be clearly defined and quantifiable (can be expressed in mathematical or logical terms).
-
-\section{Project Design} % 1 page
-
-In this final section, summarize a theoretical workflow for approaching a solution given the problem. Provide thorough discussion for what strategies you may consider employing, what analysis of the data might be required before being used, or which algorithms will be considered for your implementation. The workflow and discussion that you provide should align with the qualities of the previous sections. Additionally, you are encouraged to include small visualizations, pseudocode, or diagrams to aid in describing the project design, but it is not required. The discussion should clearly outline your intended workflow of the capstone project.
 
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
 %----------------------------------------------------------------------------------------
 
-\printbibliography[title={Bibliography}] % Print the bibliography, section title in curly brackets
+\bibliography{example}
+%\printbibliography[title={Bibliography}] % Print the bibliography, section title in curly brackets
 
 %----------------------------------------------------------------------------------------
 

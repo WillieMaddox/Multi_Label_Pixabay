@@ -41,11 +41,16 @@
 \usepackage{sectsty} % Enables custom section titles
 \allsectionsfont{\usefont{OT1}{phv}{b}{n}} % Change the font of all section commands (Helvetica)
 
-\usepackage{url}
-\usepackage{listings}
-\usepackage{minted}
+%\usepackage{url}
 \usepackage{hyperref}
+\usepackage{listings}
+\usepackage[newfloat]{minted}
+\usepackage{caption}
+
 \definecolor{bg}{rgb}{0.9,0.9,0.9}
+
+\newenvironment{code}{\captionsetup{type=listing}}{}
+\SetupFloatingEnvironment{listing}{name=Snippet}
 
 %----------------------------------------------------------------------------------------
 %	MARGINS AND SPACING
@@ -156,9 +161,12 @@
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
 %----------------------------------------------------------------------------------------
+\usepackage[super]{natbib}
+%\usepackage[backend=bibtex,style=numbers,natbib=true]{biblatex}
+%\usepackage[backend=bibtex,style=authoryear,natbib=true]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
 
-\usepackage[backend=bibtex,style=authoryear,natbib=true]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
+\bibliographystyle{unsrtnat}
 
-\addbibresource{example.bib} % The filename of the bibliography
+%\addbibresource{example.bib} % The filename of the bibliography
 
 \usepackage[autostyle=true]{csquotes} % Required to generate language-dependent quotes in the bibliography

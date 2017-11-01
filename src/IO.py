@@ -76,50 +76,6 @@ def get_whitelist_words():
     return set([s for ss in synset_words_dict.values() for s in ss])
 
 
-def read_wordnet_index_file(part_of_speech, output=None):
-    if output is None:
-        output = []
-    filename = os.path.join(wordnet_source_dir, "index." + part_of_speech)
-    with open(filename) as ifs:
-        for line in ifs.readlines():
-            if line.startswith('  '):
-                continue
-            data = line.strip().split()[0].replace('_', ' ')
-            if isinstance(output, list):
-                output.append(data)
-            elif isinstance(output, set):
-                output.add(data)
-    return output
-
-
-def read_wordnet_exc_file(part_of_speech, output=None, verbose=False):
-    if verbose:
-        print(part_of_speech)
-    filename = os.path.join(wordnet_source_dir, part_of_speech + ".exc")
-    with open(filename) as ifs:
-        lines = ifs.read().strip().split('\n')
-    word_list2 = [l.split() for l in lines]
-    if output is None:
-        output = {}
-    if isinstance(output, dict):
-        output = {w[0]: w[1:] for w in word_list2}
-    elif isinstance(output, set):
-        # output2 = set()
-        for word_list in word_list2:
-            if verbose and len(word_list) > 2:
-                print(word_list)
-            for w in word_list:
-                output.add(w.replace('_', ' '))
-            # for i, w in enumerate(word_list):
-            #     if i == 0:
-            #         output.add(w.replace('_', ' '))
-            #     else:
-            #         output2.add(w.replace('_', ' '))
-            # output.add(word_list[1:])
-
-    return output
-
-
 def read_pixabay_metadata_file():
     meta_file = os.path.join(pixabay_source_dir, 'metadata.pkl')
     return load_pkl(meta_file)

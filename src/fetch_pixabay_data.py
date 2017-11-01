@@ -166,6 +166,7 @@ if __name__ == '__main__':
     IO.merge_orphaned_metadata()
     IO.merge_orphaned_images()
 
+    imageblacklist = IO.read_pixabay_image_blacklist_file()
     labelsdata = IO.read_pixabay_metadata_file()
     totalsdata = IO.read_pixabay_totals_file()
 
@@ -197,7 +198,13 @@ if __name__ == '__main__':
 
         url_filename_list = []
         labels_updated = False
+        imageblacklist_updated = False
         for idx, record in iter(image_meta.items()):
+
+            if idx in imageblacklist:
+                imageblacklist_updated = True
+                continue
+
             if idx in labelsdata:
                 if labelsdata[idx]['width'] != record['width']:
                     if labelsdata[idx]['height'] != record['height']:
@@ -219,6 +226,7 @@ if __name__ == '__main__':
                 if 'top3' not in labelsdata[idx]:
                     labelsdata[idx]['top3'] = record['top3']
                     labels_updated = True
+
             else:
                 # Create the list of image files to download
                 url = record['webformatURL']
@@ -254,7 +262,11 @@ if __name__ == '__main__':
                     else:
                         n_skipped += 1
                 else:
+                    if idx not in imageblacklist:
+                        imageblacklist.add(idx)
+                        imageblacklist_updated = True
                     n_error += 1
+
                 n_records -= 1
 
                 sys.stdout.write(f"\rRemain:{n_records:>4} "
@@ -263,6 +275,13 @@ if __name__ == '__main__':
                                  f"Errors:{n_error:>3}")
 
         print("")
+        if imageblacklist_updated:
+            for idx in imageblacklist:
+                if idx in labelsdata:
+                    junk = labelsdata.pop(idx)
+                    labels_updated = True
+            IO.write_pixabay_image_blacklist_file(imageblacklist)
+
         # update the labels file with the new and updated labels.
         if labels_updated:
             IO.update_files(labelsdata, totalsdata, top3=True)

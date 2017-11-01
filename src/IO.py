@@ -149,6 +149,39 @@ def write_pixabay_tally_file(label_counts, top3=False):
             ofs.write(f"{counts}\t{label0}\n")
 
 
+def read_pixabay_totals_file():
+    totals_file = os.path.join(pixabay_source_dir, 'totals.txt')
+    if not os.path.exists(totals_file):
+        return {}
+    with open(totals_file) as ifs:
+        lines = ifs.read().strip().split('\n')
+    tallies = [line.split('\t') for line in lines]
+    tallies = {tuple(query.split(',')): int(total) for total, query in tallies}
+    return tallies
+
+
+def write_pixabay_totals_file(totalsdata):
+    totals_file = os.path.join(pixabay_source_dir, 'totals.txt')
+    with open(totals_file, 'w') as ofs:
+        for query, counts in sorted(totalsdata.items(), key=itemgetter(1), reverse=True):
+            ofs.write(f"{counts}\t{','.join(query)}\n")
+
+
+def read_pixabay_image_blacklist_file():
+    imageblacklist_file = os.path.join(pixabay_source_dir, 'image_blacklist.txt')
+    if not os.path.exists(imageblacklist_file):
+        return set()
+    with open(imageblacklist_file) as ifs:
+        lines = ifs.read().strip().split('\n')
+    imageblacklist = map(int, lines)
+    return set(imageblacklist)
+
+
+def write_pixabay_image_blacklist_file(imageblacklist):
+    imageblacklist_file = os.path.join(pixabay_source_dir, 'image_blacklist.txt')
+    with open(imageblacklist_file, 'w') as ofs:
+        for ii in sorted(imageblacklist):
+            ofs.write(f"{ii}\n")
 # def read_pixabay_aliases_file(dual=False):
 #     aliases_file = os.path.join(pixabay_source_dir, 'aliases.txt')
 #     with open(aliases_file) as ifs:

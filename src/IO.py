@@ -230,7 +230,7 @@ def merge_orphaned_metadata():
     write_pixabay_metadata_file(metadata)
 
 
-def update_files(metadata, top3=False):
+def update_files(metadata, totalsdata, top3=False):
     write_pixabay_metadata_file(metadata)
     remove_orphaned_metadata()
     metadata = read_pixabay_metadata_file()
@@ -238,6 +238,8 @@ def update_files(metadata, top3=False):
     label_counts = utils.get_counts(metadata)
     write_pixabay_tally_file(label_counts, top3=top3)
     print(f'tally file saved. {len(label_counts)} unique labels.', end=' ')
+    write_pixabay_totals_file(totalsdata)
+    print(f'totals file saved.')
 
 
 def convert_png_to_jpg():

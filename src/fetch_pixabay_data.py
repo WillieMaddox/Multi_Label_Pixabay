@@ -122,6 +122,7 @@ def download_and_save_image(args_tuple):
 
 def get_image_metadata(meta, curr_labels):
 
+    total = 0
     page = 0
 
     while page <= 3:
@@ -133,7 +134,8 @@ def get_image_metadata(meta, curr_labels):
             UC.take_a_nap(t=3)
             break
 
-        if temp['total'] == 0:
+        total = temp['total']
+        if total == 0:
             print("Nothing found with curr_labels:", curr_labels)
             UC.take_a_nap(t=3)
             break
@@ -150,7 +152,7 @@ def get_image_metadata(meta, curr_labels):
         if temp['totalHits'] <= page * PER_PAGE:
             break
 
-    return meta
+    return meta, total
 
 
 if __name__ == '__main__':
@@ -165,9 +167,15 @@ if __name__ == '__main__':
     IO.merge_orphaned_images()
 
     labelsdata = IO.read_pixabay_metadata_file()
+    totalsdata = IO.read_pixabay_totals_file()
 
     for ii, label in enumerate(labels):
 
+        query = set(label.split(','))
+
+        if tuple(sorted(query)) in totalsdata:
+            if totalsdata[tuple(sorted(query))] > 600:
+                continue
 
         # if ii < 415:
         #     continue
@@ -183,7 +191,9 @@ if __name__ == '__main__':
 
         image_meta = {idx: meta for idx, meta in labelsdata.items() if label in meta['top3']}
 
-        image_meta = get_image_metadata(image_meta, {label})
+        image_meta, totals = get_image_metadata(image_meta, query)
+
+        totalsdata[tuple(sorted(query))] = totals
 
         url_filename_list = []
         labels_updated = False
@@ -255,7 +265,7 @@ if __name__ == '__main__':
         print("")
         # update the labels file with the new and updated labels.
         if labels_updated:
-            IO.update_files(labelsdata, top3=True)
+            IO.update_files(labelsdata, totalsdata, top3=True)
 
         print(f'label: {label} completed')
 

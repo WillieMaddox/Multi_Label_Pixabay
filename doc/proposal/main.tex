@@ -70,52 +70,49 @@ Pixabay is a website where photographers can publish and share copyright free im
 %	\item[Image Dimension] All images must have at least 1920 along the long dimension.
 %	\item[Focus and Blurring] The image should be sharp and focused toward the center of the image.
 %	\item[Light and Colors] Check that flash, if used, was used correctly and that image is not overexposed.
-	\item Image Dimensions
+	\item Copyright and Duplicates
+	\item Noise and JPEG Compression Artifacts
 	\item Focus and Blurring
 	\item Lighting and Colors
-	\item Copyright and Duplicates
-	\item Image Manipulations
-	\item Noise and JPEG Compression Artifacts
-	\item Image Hygiene and Composition
 	\item Tilted and Crooked Images
+	\item Image Dimensions
+	\item Image Manipulations
+	\item Image Hygiene and Composition
 \end{itemize}
 
 If the image satisfies the above categories then, most likely, it will be approved~\cite{Pixabay:Tagging}.  This is probably the primary reason Pixabay is so popular among photographers and artists alike; the overall quality of images in the database is professional grade.
 
 \section{Problem Statement} % 1 para
 
-Along with the image upload, the user must also provide at least 3 tags describing the content of the image.  The average number of tags per image is around 10.  Tags make the image easily searchable by other users.  Pixabay provides a tagging tutorial on their website but in general the tags are not required to meet the same level of quality standards that are placed on a newly uploaded image \citep{Pixabay:ImgStandards}. Nor can they really be enforced.  The metric for measuring the quality of an image is well defined.  All images must have at least 1920 along the long dimension.  The image should be sharp and in focus.  Avoid embedded timestamps.  These are all acceptable forms of objective measurement.  Tags, on the other hand, represent a persons description or interpretation of what is contained in an image and as such they are difficult to use as a source of measurement.  For example, Fig.\ref{screw-1924174_640} looks like a \textit{nuts and bolts} to me, but to someone else it might be \textit{hardware} or maybe even \textit{wood}.  Which tag is more \textit{correct} is unclear.  Hence, it is probably not a good idea to use tags as a measure of whether or not an image should or should not be approved. 
+%In this section, clearly describe the problem that is to be solved. The problem described should be well defined and should have at least one relevant potential solution. Additionally, describe the problem thoroughly such that it is clear that the problem is:
+%\begin{description}
+%	\item[Quantifiable] The problem can be expressed in mathematical or logical terms.
+%	\item[Measurable] The problem can be measured by some metric and clearly observed.
+%	\item[Replicable] The problem can be reproduced and occurs more than once. 
+%\end{description}
 
+Along with the image upload, the user must also provide at least 3 tags describing the content of the image.  The average number of tags per image is around 10.  Tags make the image easily searchable by other users.  Pixabay provides a tagging tutorial on their website but in general the tags are not required to meet the same level of quality standards that are placed on a newly uploaded image \citep{Pixabay:ImgStandards}. Nor can they really be enforced.  The metric for measuring the quality of an image is well defined.  All images must have at least 1920 along the long dimension.  The image should be sharp and in focus.  Avoid embedded timestamps.  These are all acceptable forms of objective measurement.  Tags, on the other hand, represent a persons description or interpretation of what is contained in an image and as such they (the tags) are difficult to use as a source of measurement.
 \begin{figure}
 	\includegraphics[width=\linewidth]{screw-1924174_640.jpg} % Figure image
 	\caption{Nuts n Bolts n Boots n Pants} % Figure caption
 	\label{screw-1924174_640} % Label for referencing with \ref{bear}
 \end{figure}
+For example, Fig.\ref{screw-1924174_640} looks like \textit{nuts and bolts} to me, but to someone else it might be \textit{hardware} or maybe even \textit{wood}.  Which tags are \textit{correct}?  Well all of them.  The final decision on which labels to use for tagging an image will be up to the owner of the image.  Hence, it is probably not a good idea to use tags as a measure of whether or not an image should or should not be approved.
 
-When a user uploads an image to Pixabay, they are required to provide at least 3 labels (or tags) to describe the content of their image.  Assuming that the user is the original author (or photographer) of the image, then coming up with 3 relevant tags should be trivial.  However, on average, users will tend to choose around 10 tags to label their image, makeing it easier to find through searches.  
+Assuming that the user is the original author (or photographer) of the image, then coming up with 3 relevant tags should be trivial.  Authors have first hand knowledge of their own images and can generally be trusted to tag the image correctly.  After all, an image with mislabeled tags is an image that no one will ever find. And since so much effort is required on the part of the author to get an image approved in the first place, it seems highly unlikely that anyone would ever mislabel one of their own images on purpose.  And yet many of the images on pixabay have tags that are incorrect or at least appear to be.
 
-Incorrect search tags. papillon returns lots of butterflies (no papillon tag either)
-Misspelled words, siberian husky not sibirian husky
-People end up choosing tags that are not exactly relevant.
-You don't have to spend a lot of time browsing pictures before you find one with a bogus label.
-The problem is that many of the 
+major tag problem areas:
 
+\begin{enumerate}
+	\item Misspelled tags. siberian husky not sibirian husky.
+	\item Irrelevant tags.
+	\item Different translations.
+	\item Incorrect tags. papillon returns lots of butterflies (no papillon tag either)
+\end{enumerate}
 
-Can we improve the classification by adding more types of dogs, cats, etc.
+Show examples of 2-3 images that have bogus tags.
 
-The good thing is that users who upload pictures have first hand knowledge of familiar with the content in the image and can generally be trusted to tag the image correctly.  After all, an image with mislabeled tags is an image that no one will ever find. And since so much effort is required on the part of the author to get an image approved, it would seem highly unlikely that someone mislabel their own image on purpose.  
-
-When a user is first presented with the tag screen, they are asked to type in tags corresponding to the content of their image.  After they type the first tag, a list of similar words (30 or so) appear for the user to select from. The list is auto-refreshed as new tags are added.  This is a nice convenience that Pixabay provides, but wouldn't it be even nicer to recommend to the user in the first place a list of tags based soley on the content of the image?  
-
-In this section, clearly describe the problem that is to be solved. The problem described should be well defined and should have at least one relevant potential solution. 
-
-Additionally, describe the problem thoroughly such that it is clear that the problem is:
-
-\begin{description}
-	\item[Quantifiable] The problem can be expressed in mathematical or logical terms.
-	\item[Measurable] The problem can be measured by some metric and clearly observed.
-	\item[Replicable] The problem can be reproduced and occurs more than once. Show examples of 2-3 images that have bogus tags.
-\end{description}
+%When a user is first presented with the tag screen, they are asked to type in tags corresponding to the content of their image.  After they type the first tag, a list of similar words (30 or so) appear for the user to select from. The list is auto-refreshed as new tags are added.  This is a nice convenience that Pixabay provides, but wouldn't it be even nicer to recommend to the user in the first place a list of tags based soley on the content of the image?  
 
 \section{Datasets and Inputs} % 2 - 3 para
 
@@ -179,7 +176,7 @@ The details (usage, directory layout, data formats, etc.) of the other datasets 
 %	\item[Replicable] The solution can be reproduced and occurs more than once.
 %\end{description}
 
-The solution is to train a model that is capable of generating a finite set of tags based solely on an input image.  We will measure the performance of our model by comparing the top $k$ predicted labels from our model against the known ground truth labels for each of our images.  The exact value of $k$ and the specific metric used are discussed in the following sections. We set aside a subset of our training data which will be used exclusively for testing. For each image in this testing set, the goal is to reproduce similar results for each one.
+The solution is to train a model that is capable of generating (or recommending) a finite set of tags based soley on an input image.  We will measure the performance of our model by comparing the top $k$ predicted labels from our model against the known ground truth labels for each of our images.  The exact value of $k$ and the specific metric used are discussed in the following sections. We set aside a subset of our training data which will be used exclusively for testing. For each image in this testing set, the goal is to reproduce similar results for each one.
 
 \section{Benchmark Model} % 1 - 2 para
 
@@ -209,6 +206,8 @@ The second is the Ja
 \section{Project Design} % 1 page
 
 % In this final section, summarize a theoretical workflow for approaching a solution given the problem. Provide thorough discussion for what strategies you may consider employing, what analysis of the data might be required before being used, or which algorithms will be considered for your implementation. The workflow and discussion that you provide should align with the qualities of the previous sections. Additionally, you are encouraged to include small visualizations, pseudocode, or diagrams to aid in describing the project design, but it is not required. The discussion should clearly outline your intended workflow of the capstone project.
+
+Can we improve the classification by adding more types of dogs, cats, etc.
 
 Search for images with Imagenet Labels
 

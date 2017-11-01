@@ -142,14 +142,6 @@ def get_image_metadata(meta, curr_labels):
 
             top3_tags = tuple([tag.strip(' ') for tag in record['tags'].split(',')])
 
-            if record['id'] in meta:
-                if 'top3' in meta[record['id']]:
-                    orig_top3 = meta[record['id']]['top3']
-                    if orig_top3 != top3_tags:
-                        print('Mismatched Tags:')
-                        print(orig_top3)
-                        print(top3_tags)
-
             meta[record['id']] = {'top3': top3_tags,
                                   'height': record['webformatHeight'],
                                   'width': record['webformatWidth'],
@@ -209,6 +201,14 @@ if __name__ == '__main__':
                         print(f'new: {record}')
                         print('\n')
                         continue
+
+                if 'top3' in labelsdata[idx]:
+                    if labelsdata[idx]['top3'] != record['top3']:
+                        print(f"Mismatched Tags: {idx}, query: {query}")
+                        print(f"old: {labelsdata[idx]['top3']}")
+                        print(f"new: {record['top3']}")
+                        labelsdata[idx]['top3'] = record['top3']
+                        labels_updated = True
 
                 if 'top3' not in labelsdata[idx]:
                     labelsdata[idx]['top3'] = record['top3']

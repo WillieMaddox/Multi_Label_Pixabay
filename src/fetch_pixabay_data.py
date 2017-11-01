@@ -92,31 +92,48 @@ def download_metadata(labels, page=1, per_page=PER_PAGE):
 
 
 def download_and_save_image(args_tuple):
-    idx, url, filename = args_tuple
+    idx, url, filebase = args_tuple
+    new_filename = ''
     is_new = False
+    urlfiletype = url.split('.')[-1]
+
     try:
-        if filename.endswith('.jpg'):
+        if urlfiletype == 'jpg':
+            filename = '.'.join([filebase, 'jpg'])
+
             if not os.path.exists(filename):
                 urllib.request.urlretrieve(url, filename)
                 _ = io.imread(filename)
                 is_new = True
-        elif filename.endswith('.png'):
-            new_filename = ''.join([filename[:-3], 'jpg'])
-            if not os.path.exists(new_filename):
+        else:
+            filename = '.'.join([filebase, urlfiletype])
+            new_filename = '.'.join([filebase, 'jpg'])
+
+            if os.path.exists(new_filename):
+                st = os.stat(new_filename)
+                if st.st_size == 0:
+                    os.remove(new_filename)
+            else:
                 urllib.request.urlretrieve(url, filename)
                 im = Image.open(filename)
                 im.save(new_filename, "JPEG")
                 os.remove(filename)
                 is_new = True
+
         return idx, True, is_new
 
     except Exception as e:
-        print('\nBad url or image: ', end=' ')
-        print(e)
+        print('\nError: ', end=' ')
+        print(e, end=', ')
+        print(f'Deleting', end=' ')
         if os.path.exists(filename):
-            print(f'Deleting file {filename}...', end=' ')
+            print(f"{filename.split(os.sep)[-1]}", end=' ')
             os.remove(filename)
-            print('Deleted')
+        if os.path.exists(new_filename):
+            print(f"{new_filename.split(os.sep)[-1]}", end=' ')
+            os.remove(new_filename)
+        print('... Deleted')
+
         return idx, False, is_new
 
 
@@ -230,9 +247,8 @@ if __name__ == '__main__':
             else:
                 # Create the list of image files to download
                 url = record['webformatURL']
-                filetype = url.split('.')[-1]
-                filename = f"{IO.pixabay_image_dir}/{idx}.{filetype}"
-                url_filename_list.append((idx, url, filename))
+                filebase = f"{IO.pixabay_image_dir}/{idx}"
+                url_filename_list.append((idx, url, filebase))
 
         n_records = len(url_filename_list)
 
